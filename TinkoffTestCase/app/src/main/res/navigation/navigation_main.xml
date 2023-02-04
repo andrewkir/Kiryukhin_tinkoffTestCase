@@ -7,5 +7,17 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="ru.andrewkir.tinkofftestcase.flows.main.PopularFragment"
-        android:label="MainFragment" />
+        android:label="MainFragment">
+        <action
+            android:id="@+id/action_mainFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="ru.andrewkir.tinkofftestcase.flows.details.DetailsFragment"
+        android:label="DetailsFragment">
+        <argument
+            android:name="filmID"
+            app:argType="integer" />
+    </fragment>
 </navigation>

@@ -54,12 +54,15 @@ class MainRepositoryImpl @Inject constructor(
         return when (result) {
             is ApiResponse.OnSuccessResponse -> {
                 result.value.map { pagingData ->
-                    pagingData.map {
+                    pagingData.map { it ->
                         MovieModel(
-                            it.filmId,
-                            it.nameRu,
-                            it.posterUrl,
-                            it.genres?.get(0)?.genre ?: ""
+                            id = it.filmId,
+                            name = it.nameRu,
+                            posterUrl = it.posterUrl,
+                            genres = it.genres?.map { genre -> genre.genre ?: "" } ?: emptyList(),
+                            year = it.year,
+                            countries = it.countries?.map { country -> country.country ?: "" }
+                                ?: emptyList()
                         )
                     }
                 }
@@ -70,12 +73,38 @@ class MainRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getMovie(id: Int): MovieModel? {
+        val result = runBlocking {
+            protectedApiCall {
+                kinopoiskApi.getMovieInfo(id)
+            }
+        }
+        return when (result) {
+            is ApiResponse.OnSuccessResponse -> {
+                MovieModel(
+                    id = result.value.filmId,
+                    name = result.value.nameRu,
+                    posterUrl = result.value.posterUrl,
+                    genres = result.value.genres?.map { genre -> genre.genre ?: "" } ?: emptyList(),
+                    year = result.value.year,
+                    countries = result.value.countries?.map { country -> country.country ?: "" }
+                        ?: emptyList(),
+                    description = result.value.description
+                )
+            }
+            else -> null
+        }
+    }
+
     override fun addItem(item: MovieModel) {
         movieModelDao.addItem(
             MovieEntity(
                 item.id ?: 0,
                 item.name ?: "",
-                item.posterUrl ?: ""
+                item.posterUrl ?: "",
+                item.genres ?: emptyList(),
+                item.countries ?: emptyList(),
+                item.description ?: ""
             )
         )
     }
@@ -85,7 +114,10 @@ class MainRepositoryImpl @Inject constructor(
             MovieEntity(
                 item.id ?: 0,
                 item.name ?: "",
-                item.posterUrl ?: ""
+                item.posterUrl ?: "",
+                item.genres ?: emptyList(),
+                item.countries ?: emptyList(),
+                item.description ?: ""
             )
         )
     }
@@ -95,12 +127,15 @@ class MainRepositoryImpl @Inject constructor(
             MovieEntity(
                 item.id ?: 0,
                 item.name ?: "",
-                item.posterUrl ?: ""
+                item.posterUrl ?: "",
+                item.genres ?: emptyList(),
+                item.countries ?: emptyList(),
+                item.description ?: ""
             )
         )
     }
 
-    suspend fun <T> protectedApiCall(
+    private suspend fun <T> protectedApiCall(
         api: suspend () -> T
     ): ApiResponse<T> {
         return withContext(Dispatchers.IO) {

@@ -10,13 +10,15 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import ru.andrewkir.domain.models.MovieModel
 import ru.andrewkir.tinkofftestcase.R
 
 class MoviesAdapter(
-    private val listener: (MovieModel?) -> Unit
+    private val listener: (MovieModel?) -> Unit,
+    private val longClickListener: (MovieModel?) -> Unit
 ) :
     PagingDataAdapter<MovieModel, MoviesAdapter.ViewHolder>(MovieDiffCallBack()) {
 
@@ -47,18 +49,22 @@ class MoviesAdapter(
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.run {
             name.text = getItem(position)?.name
-            description.text = getItem(position)?.genre
+            description.text = getItem(position)?.genres?.get(0) ?: ""
             Glide
                 .with(poster.context)
                 .load(getItem(position)?.posterUrl)
                 .centerCrop()
 //                .placeholder(R.drawable.loading_spinner)
                 .apply(RequestOptions.bitmapTransform(RoundedCorners(25)))
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(poster)
 
-            (name.parent as View).setOnLongClickListener {
-                listener.invoke(getItem(position))
+            (name.parent.parent as View).setOnLongClickListener {
+                longClickListener.invoke(getItem(position))
                 true
+            }
+            (name.parent.parent as View).setOnClickListener {
+                listener.invoke(getItem(position))
             }
         }
     }

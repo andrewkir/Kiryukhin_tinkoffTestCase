@@ -8,13 +8,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import ru.andrewkir.tinkofftestcase.App
+import ru.andrewkir.tinkofftestcase.R
 import ru.andrewkir.tinkofftestcase.common.BaseFragment
 import ru.andrewkir.tinkofftestcase.common.ViewModelFactory
 import ru.andrewkir.tinkofftestcase.databinding.FragmentPopularBinding
+import ru.andrewkir.tinkofftestcase.flows.details.DetailsFragmentArgs
 import ru.andrewkir.tinkofftestcase.flows.main.adapters.MoviesAdapter
 import javax.inject.Inject
 
@@ -38,9 +41,10 @@ class PopularFragment : BaseFragment<PopularViewModel, FragmentPopularBinding>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = MoviesAdapter() {
-            viewModel.updateItem(it)
-        }
+        adapter = MoviesAdapter({
+            val action = PopularFragmentDirections.actionMainFragmentToDetailsFragment(it?.id ?: 0)
+            findNavController().navigate(action)
+        }, { viewModel.updateItem(it) })
 
         bind.recyclerView.adapter = adapter
         bind.recyclerView.layoutManager = LinearLayoutManager(requireContext())

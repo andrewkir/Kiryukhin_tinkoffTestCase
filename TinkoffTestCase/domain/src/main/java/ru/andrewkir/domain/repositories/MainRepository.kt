@@ -6,6 +6,7 @@ import ru.andrewkir.domain.models.MovieModel
 
 interface MainRepository {
     fun getMoviesList(): Flow<PagingData<MovieModel>>?
+    fun getMovie(id: Int): MovieModel?
     fun addItem(item: MovieModel)
     fun removeItem(item: MovieModel)
     fun updateItem(item: MovieModel)
