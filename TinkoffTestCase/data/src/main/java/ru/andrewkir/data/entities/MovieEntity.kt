@@ -6,14 +6,16 @@ import java.util.stream.Collectors
 
 @Entity(tableName = "MovieEntity")
 data class MovieEntity(
-    @PrimaryKey val filmId: Int,
+    @PrimaryKey
+    @ColumnInfo(name = "filmId")val filmId: Int,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "posterUrl") val posterUrl: String,
     @TypeConverters(GenresConverter::class)
     @ColumnInfo(name = "genres") val genres: List<String>,
     @TypeConverters(GenresConverter::class)
     @ColumnInfo(name = "countries") val countries: List<String>,
-    @ColumnInfo(name = "description") val description: String
+    @ColumnInfo(name = "description") val description: String,
+    @ColumnInfo(name = "year") val year: String
 )
 
 class GenresConverter {

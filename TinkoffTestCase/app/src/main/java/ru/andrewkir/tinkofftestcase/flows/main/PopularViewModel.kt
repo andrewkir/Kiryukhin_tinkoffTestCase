@@ -15,15 +15,20 @@ class PopularViewModel @Inject constructor(private val repository: MainRepositor
         return repository.getMoviesList()
     }
 
-    fun removeItem(item: MovieModel) {
+    fun getFavouritesList(): List<MovieModel> {
+        return repository.getFavouritesMovies()
+    }
+
+    fun removeItem(item: MovieModel?) {
+        if (item == null) return
         viewModelScope.launch {
             repository.removeItem(item)
         }
     }
 
-    fun addItem(text: String) {
+    fun addItem(item: MovieModel?) {
         viewModelScope.launch {
-            repository.addItem(MovieModel())
+            repository.addItem(item ?: MovieModel())
         }
     }
 

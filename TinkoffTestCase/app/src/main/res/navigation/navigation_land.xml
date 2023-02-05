@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation_main"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/fragmentPlaceholder">
 
     <fragment
         android:id="@+id/mainFragment"
@@ -14,9 +14,6 @@
         <action
             android:id="@+id/action_mainFragment_to_favouritesFragment"
             app:destination="@id/favouritesFragment" />
-        <action
-            android:id="@+id/action_mainFragment_self"
-            app:destination="@id/mainFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailsFragment"
@@ -26,25 +23,30 @@
             android:name="filmID"
             app:argType="integer" />
         <action
-            android:id="@+id/action_detailsFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            android:id="@+id/action_detailsFragment_self"
+            app:destination="@id/detailsFragment" />
         <action
-            android:id="@+id/action_detailsFragment_to_favouritesFragment"
-            app:destination="@id/favouritesFragment" />
+            android:id="@+id/action_detailsFragment_to_fragmentPlaceholder"
+            app:destination="@id/fragmentPlaceholder" />
     </fragment>
     <fragment
         android:id="@+id/favouritesFragment"
         android:name="ru.andrewkir.tinkofftestcase.flows.favourites.FavouritesFragment"
-        android:label="FavouritesFragment" >
+        android:label="FavouritesFragment">
         <action
             android:id="@+id/action_favouritesFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
         <action
-            app:popUpTo="@id/mainFragment"
             android:id="@+id/action_favouritesFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
+            app:destination="@id/mainFragment"
+            app:popUpTo="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentPlaceholder"
+        android:name="ru.andrewkir.tinkofftestcase.common.FragmentPlaceholder"
+        android:label="FragmentPlaceholder" >
         <action
-            android:id="@+id/action_favouritesFragment_self"
-            app:destination="@id/favouritesFragment" />
+            android:id="@+id/action_fragmentPlaceholder_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
     </fragment>
 </navigation>

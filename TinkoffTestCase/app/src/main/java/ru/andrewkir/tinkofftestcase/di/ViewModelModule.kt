@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import ru.andrewkir.tinkofftestcase.common.ViewModelFactory
 import ru.andrewkir.tinkofftestcase.flows.details.DetailsViewModel
+import ru.andrewkir.tinkofftestcase.flows.favourites.FavouritesViewModel
 import ru.andrewkir.tinkofftestcase.flows.main.PopularViewModel
 
 @Module
@@ -23,4 +24,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(DetailsViewModel::class)
     abstract fun detailsViewModel(viewModel: DetailsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FavouritesViewModel::class)
+    abstract fun favouritesViewModel(viewModel: FavouritesViewModel): ViewModel
 }

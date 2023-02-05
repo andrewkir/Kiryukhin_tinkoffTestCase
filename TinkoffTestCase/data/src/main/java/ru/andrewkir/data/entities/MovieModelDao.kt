@@ -6,7 +6,7 @@ import ru.andrewkir.domain.models.MovieModel
 @Dao
 interface MovieModelDao {
     @Query("SELECT * FROM MovieEntity")
-    fun getMoviesList(): List<MovieModel>
+    fun getMoviesList(): List<MovieEntity>
 
     @Insert
     fun addItem(item: MovieEntity)

@@ -9,7 +9,7 @@ import ru.andrewkir.data.entities.MovieModelDao
 
 @Database(
     entities = [MovieEntity::class],
-    version = 5
+    version = 6
 )
 
 @TypeConverters(GenresConverter::class)

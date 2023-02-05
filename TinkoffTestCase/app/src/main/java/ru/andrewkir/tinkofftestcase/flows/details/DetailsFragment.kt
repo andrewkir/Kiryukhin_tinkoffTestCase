@@ -1,6 +1,7 @@
 package ru.andrewkir.tinkofftestcase.flows.details
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -9,11 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import ru.andrewkir.tinkofftestcase.App
 import ru.andrewkir.tinkofftestcase.MainActivity
+import ru.andrewkir.tinkofftestcase.R
 import ru.andrewkir.tinkofftestcase.common.BaseFragment
 import ru.andrewkir.tinkofftestcase.common.ViewModelFactory
 import ru.andrewkir.tinkofftestcase.databinding.FragmentDetailsBinding
@@ -56,6 +59,14 @@ class DetailsFragment : BaseFragment<DetailsViewModel, FragmentDetailsBinding>()
                 "Жанры: ${it.genres?.joinToString(separator = ", ") { genre -> genre }}"
             bind.Countries.text =
                 "Жанры: ${it.countries?.joinToString(separator = ", ") { country -> country }}"
+        }
+
+        bind.backButton.setOnClickListener {
+            if (activity?.resources?.configuration?.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                activity?.onBackPressed()
+            } else {
+                (activity as MainActivity).navBackInLandscape()
+            }
         }
     }
 

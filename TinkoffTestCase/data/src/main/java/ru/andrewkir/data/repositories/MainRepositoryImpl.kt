@@ -1,5 +1,7 @@
 package ru.andrewkir.data.repositories
 
+import android.content.Context
+import android.widget.Toast
 import androidx.paging.*
 import com.google.gson.JsonSyntaxException
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +24,8 @@ import javax.inject.Inject
 
 class MainRepositoryImpl @Inject constructor(
     private val movieModelDao: MovieModelDao,
-    private val kinopoiskApi: KinopoiskApi
+    private val kinopoiskApi: KinopoiskApi,
+    private val context: Context
 ) :
     MainRepository {
 
@@ -68,6 +71,7 @@ class MainRepositoryImpl @Inject constructor(
                 }
             }
             is ApiResponse.OnErrorResponse -> {
+                Toast.makeText(context, "Произошла ошибка", Toast.LENGTH_SHORT).show()
                 null
             }
         }
@@ -96,6 +100,20 @@ class MainRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getFavouritesMovies(): List<MovieModel> {
+        return movieModelDao.getMoviesList().map {
+            MovieModel(
+                id = it.filmId,
+                name = it.name,
+                description = it.description,
+                genres = it.genres,
+                countries = it.countries,
+                year = it.year,
+                posterUrl = it.posterUrl
+            )
+        }
+    }
+
     override fun addItem(item: MovieModel) {
         movieModelDao.addItem(
             MovieEntity(
@@ -104,7 +122,8 @@ class MainRepositoryImpl @Inject constructor(
                 item.posterUrl ?: "",
                 item.genres ?: emptyList(),
                 item.countries ?: emptyList(),
-                item.description ?: ""
+                item.description ?: "",
+                item.year ?: ""
             )
         )
     }
@@ -117,7 +136,8 @@ class MainRepositoryImpl @Inject constructor(
                 item.posterUrl ?: "",
                 item.genres ?: emptyList(),
                 item.countries ?: emptyList(),
-                item.description ?: ""
+                item.description ?: "",
+                item.year ?: ""
             )
         )
     }
@@ -130,7 +150,8 @@ class MainRepositoryImpl @Inject constructor(
                 item.posterUrl ?: "",
                 item.genres ?: emptyList(),
                 item.countries ?: emptyList(),
-                item.description ?: ""
+                item.description ?: "",
+                item.year ?: ""
             )
         )
     }
